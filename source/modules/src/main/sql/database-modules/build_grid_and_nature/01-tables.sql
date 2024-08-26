@@ -43,4 +43,3 @@ CREATE TABLE grid.uncalculated_receptors (
 	CONSTRAINT uncalculated_receptors_pkey PRIMARY KEY (receptor_id),
 	CONSTRAINT uncalculated_receptors_fkey_receptors FOREIGN KEY (receptor_id) REFERENCES grid.receptors
 );
-
