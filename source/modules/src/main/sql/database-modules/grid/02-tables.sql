@@ -1,0 +1,49 @@
+/*
+ * receptors
+ * ---------
+ * Table containing the receptors (standard calculation points).
+ * Receptors represent the center point of the accompanying hexagons.
+ */
+CREATE TABLE grid.receptors (
+	receptor_id integer NOT NULL,
+	geometry geometry(Point),
+
+	CONSTRAINT receptors_pkey PRIMARY KEY (receptor_id)
+);
+
+CREATE INDEX idx_receptors_geometry_gist ON grid.receptors USING GIST (geometry);
+
+
+/*
+ * hexagons
+ * --------
+ * Table containing the hexagons (including geometry) that belong to receptors.
+ * These hexagons serve as a representation of the receptor at a certain zoom level.
+ * For NL, the surface of a hexagon at zoom level 1 matches a hectare.
+ * For UK, the surface of a hexagon at zoom level 1 matches 4 hectares.
+ * At higher zoom levels the hexagons are aggregations.
+ */
+CREATE TABLE grid.hexagons (
+	receptor_id integer NOT NULL,
+	zoom_level posint NOT NULL,
+	geometry geometry(Polygon),
+
+	CONSTRAINT hexagons_pkey PRIMARY KEY (receptor_id, zoom_level),
+	CONSTRAINT hexagons_fkey_receptors FOREIGN KEY (receptor_id) REFERENCES grid.receptors
+);
+
+CREATE INDEX idx_hexagons_geometry_gist ON grid.hexagons USING GIST (geometry);
+CREATE INDEX idx_hexagons_zoom_level ON grid.hexagons (zoom_level);
+
+
+/*
+ * non_exceeding_receptors
+ * -----------------------
+ * Table containing the receptors for which the (nitrogen) deposition does NOT exceed or nearly exceeds the critical deposition value (KDW - 70 mol).
+ */
+CREATE TABLE grid.non_exceeding_receptors (
+	receptor_id integer NOT NULL,
+
+	CONSTRAINT non_exceeding_receptors_policies_pkey PRIMARY KEY (receptor_id),
+	CONSTRAINT non_exceeding_receptors_policies_fkey_receptors FOREIGN KEY (receptor_id) REFERENCES grid.receptors
+);
