@@ -1,7 +1,7 @@
-# Grid and Nature generate database
+# Nature build database
 
-This database is used to generate Grid and Nature dbdata files. See 
-[`store.sql`](../../../source/modules/src/data/sql/database-modules/build_grid_and_nature/store.sql) for all dbdata files that are stored.
+This database is used to generate the Nature dbdata files. See 
+[`store.sql`](../../../source/modules/src/data/sql/database-modules/build_nature/store.sql) for all dbdata files that are stored.
 
 
 ## Commands

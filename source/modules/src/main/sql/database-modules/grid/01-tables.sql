@@ -34,16 +34,3 @@ CREATE TABLE grid.hexagons (
 
 CREATE INDEX idx_hexagons_geometry_gist ON grid.hexagons USING GIST (geometry);
 CREATE INDEX idx_hexagons_zoom_level ON grid.hexagons (zoom_level);
-
-
-/*
- * non_exceeding_receptors
- * -----------------------
- * Table containing the receptors for which the (nitrogen) deposition does NOT exceed or nearly exceeds the critical deposition value (KDW - 70 mol).
- */
-CREATE TABLE grid.non_exceeding_receptors (
-	receptor_id integer NOT NULL,
-
-	CONSTRAINT non_exceeding_receptors_policies_pkey PRIMARY KEY (receptor_id),
-	CONSTRAINT non_exceeding_receptors_policies_fkey_receptors FOREIGN KEY (receptor_id) REFERENCES grid.receptors
-);

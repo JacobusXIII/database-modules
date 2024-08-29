@@ -2,8 +2,7 @@ add_build_constants
 
 cluster_tables
 
-run_sql "constants.sql"
-run_sql "build.sql"
+run_sql "build_base_24.sql"
 
 synchronize_serials
 
