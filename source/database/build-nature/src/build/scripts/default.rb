@@ -4,17 +4,11 @@ check_datasources
 
 create_database :overwrite_existing
 
-begin
+import_database_structure
+update_comments
 
-  import_database_structure
-  update_comments
+load_data
 
-  load_data
-
-  generate_html_documentation
-  generate_rtf_documentation
-  generate_datasources_json
-
-ensure
-
-end
+generate_html_documentation
+generate_rtf_documentation
+generate_datasources_json
