@@ -12,7 +12,7 @@ $pg_username = 'aerius'
 $pg_password = '' # Override in AeriusSettings.User.rb
 
 
-$dbdata_dir = 'dbdata/aeriusII/'
+$dbdata_dir = 'dbdata/'
 $dbdata_path = File.expand_path($repo_root_folder + '/../../' + $dbdata_dir).fix_pathname
 
 

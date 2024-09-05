@@ -2,7 +2,10 @@ add_build_constants
 
 cluster_tables
 
-run_sql "build_base_24.sql"
+# Uncomment the (single) test you want to run.
+# Due to the `recurring or circular {import_common} detection` we cannot run all test during one single build.
+run_sql "test_grid_and_nature.sql"
+# run_sql "test_build_nature.sql"
 
 synchronize_serials
 
