@@ -15,7 +15,7 @@
  * <       decrease is allowed
  * = (<)   decrease in favor of another species is allowed
  */
-CREATE TYPE nature.habitat_goal_type AS ENUM
+CREATE TYPE habitat_goal_type AS ENUM
 	('specified', 'none', 'level', 'increase', 'level_increase', 'decrease', 'level_decrease', 'increase_may_decrease');
 
 /*
@@ -23,7 +23,7 @@ CREATE TYPE nature.habitat_goal_type AS ENUM
  * ------------
  * The type of a (animal) species which are present in a habitat.
  */
-CREATE TYPE nature.species_type AS ENUM
+CREATE TYPE species_type AS ENUM
 	('habitat_species', 'breeding_bird_species', 'non_breeding_bird_species');
 
 /*
@@ -31,7 +31,7 @@ CREATE TYPE nature.species_type AS ENUM
  * -----------------------------
  * The type of a critical deposition area.
  */
-CREATE TYPE nature.critical_deposition_area_type AS ENUM
+CREATE TYPE critical_deposition_area_type AS ENUM
 	('relevant_habitat', 'habitat');
 
 /*
@@ -39,5 +39,5 @@ CREATE TYPE nature.critical_deposition_area_type AS ENUM
  * ----------------------------------
  * Enum type for critical load (KDW, Kritische Depositie Waarde) classifications.
  */
-CREATE TYPE nature.critical_deposition_classification AS ENUM
+CREATE TYPE critical_deposition_classification AS ENUM
 	('high_sensitivity', 'normal_sensitivity', 'low_sensitivity');
