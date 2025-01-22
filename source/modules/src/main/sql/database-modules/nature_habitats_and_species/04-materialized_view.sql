@@ -1,7 +1,8 @@
 /*
  * habitats
  * --------
- * Materialized view to return the habitats table, a union of all habitat areas of the same habitat type within an assssment area.
+ * Materialized view to return the habitats, 
+ * a union of all habitat areas of the same habitat type within an assssment area.
  *
  * When determining the average coverage for a habitat, the surface of the individual habitat areas is used as weight.
  */
@@ -25,7 +26,8 @@ CREATE INDEX idx_habitats_gist ON habitats USING GIST (geometry);
 /*
  * relevant_habitats
  * -----------------
- * Materialized view to return the relevant_habitats table, a union of all the relevant parts of habitat areas of the same habitat type in an assessment area.
+ * Materialized view to return the relevant_habitats,
+ * a union of all the relevant parts of habitat areas of the same habitat type in an assessment area.
  *
  * When determining the average coverage for a relevant habitat, the surface of the individual relevant habitat areas is used as weight.
  * When the habitat area is partly relevant, the whole area of the habitat is used as the weight.
@@ -52,9 +54,8 @@ CREATE INDEX idx_relevant_habitats_gist ON relevant_habitats USING GIST (geometr
 /*
  * relevant_species
  * ----------------
- * Marerialized voor het teruggeven van de table relevant_species.
- *
- * Dit zijn de gegroepeerde relevant_habitats per species_id. 
+ * Materialized view to return the relevant_species table, 
+ * a union of all the relevant parts of habitat areas related to the same species in an assessment area.
  */
 CREATE MATERIALIZED VIEW relevant_species AS
 SELECT

@@ -1,9 +1,8 @@
 /*
  * relevant_goal_habitats
  * ----------------------
- * Marerialized view voor het teruggeven van de table relevant_goal_habitats.
- *
- * Dit zijn de gegroepeerde relevant_habitats per goal_habitat_type_id. 
+ * Materialized view to return the relevant_goal_habitats table, 
+ * a union of all the relevant parts of habitat areas related to the same goal habitat type in an assessment area.
  */
 CREATE MATERIALIZED VIEW relevant_goal_habitats AS
 SELECT
