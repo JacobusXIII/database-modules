@@ -4,3 +4,8 @@
 BEGIN; SELECT system.load_table('relevant_habitat_areas', '{data_folder}/common/nature_habitats_and_species/21/nature.relevant_habitat_areas_20210924.txt', FALSE); COMMIT;
 BEGIN; SELECT system.load_table('habitats', '{data_folder}/common/nature_habitats_and_species/21/nature.habitats_20210924.txt', FALSE); COMMIT;
 BEGIN; SELECT system.load_table('relevant_habitats', '{data_folder}/common/nature_habitats_and_species/21/nature.relevant_habitats_20210924.txt', FALSE); COMMIT;
+
+
+-- Refresh all materialized views
+BEGIN; REFRESH MATERIALIZED VIEW relevant_goal_habitats; COMMIT;
+BEGIN; REFRESH MATERIALIZED VIEW relevant_species; COMMIT;
