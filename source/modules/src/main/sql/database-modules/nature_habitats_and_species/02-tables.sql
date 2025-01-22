@@ -125,53 +125,6 @@ CREATE INDEX idx_relevant_habitat_areas_habitat_type_id ON relevant_habitat_area
 
 
 /*
- * habitats
- * --------
- * Table containing combined habitat areas per assessment area and habitat type.
- * The geometry is the combination of all individual areas of the habitat type within the assessment area.
- *
- * @column habitat_coverage Average coverage for this habitat. Calculated based on the average of the individual habitat areas, 
- * weighted by surface of each area.
- */
-CREATE TABLE habitats
-(
-	assessment_area_id integer NOT NULL,
-	habitat_type_id integer NOT NULL,
-	habitat_coverage fraction NOT NULL,
-	geometry geometry(MultiPolygon),
-
-	CONSTRAINT habitats_pkey PRIMARY KEY (assessment_area_id, habitat_type_id),
-	CONSTRAINT habitats_fkey_habitat_types FOREIGN KEY (habitat_type_id) REFERENCES habitat_types
-);
-
-CREATE INDEX idx_habitats_geometry_gist ON habitats USING GIST (geometry);
-CREATE INDEX idx_habitats_habitat_type_id ON habitats (habitat_type_id);
-
-
-/*
- * relevant_habitats
- * -----------------
- * Table containing relevant (parts of) combined habitat areas.
- *
- * @column habitat_coverage Average coverage for this habitat. Calculated based on the average of the individual habitat areas, 
- * weighted by surface of each area. For partially relevant habitat areas, the full surface of the area is used as the weight.
- */
-CREATE TABLE relevant_habitats
-(
-	assessment_area_id integer NOT NULL,
-	habitat_type_id integer NOT NULL,
-	habitat_coverage fraction NOT NULL,
-	geometry geometry(MultiPolygon),
-
-	CONSTRAINT relevant_habitats_pkey PRIMARY KEY (assessment_area_id, habitat_type_id),
-	CONSTRAINT relevant_habitats_fkey_habitat_types FOREIGN KEY (habitat_type_id) REFERENCES habitat_types
-);
-
-CREATE INDEX idx_relevant_habitats_geometry_gist ON relevant_habitats USING GIST (geometry);
-CREATE INDEX idx_relevant_habitats_habitat_type_id ON relevant_habitats (habitat_type_id);
-
-
-/*
  * species
  * -------
  * Table containing species that can be present in a habitat.
