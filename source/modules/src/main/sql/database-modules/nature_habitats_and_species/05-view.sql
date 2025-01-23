@@ -12,7 +12,7 @@ SELECT
 	FROM habitat_type_critical_levels
 
 	WHERE
-		substance_id= 1711
+		substance_id = 1711
 		AND result_type = 'deposition'
 ;
 
@@ -21,7 +21,7 @@ SELECT
  * relevant_goal_habitat_types_view
  * --------------------------------
  * View to collect the relevant goal habitat types with name and description per assessment areas.
- * This includes all Hbaitat-, Species- and H9999- goal habitat types.
+ * This includes all Habitat-, Species- and H9999- goal habitat types.
  */
 CREATE OR REPLACE VIEW relevant_goal_habitat_types_view AS
 SELECT
