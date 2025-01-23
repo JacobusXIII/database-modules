@@ -56,6 +56,8 @@ CREATE INDEX idx_relevant_habitats_gist ON relevant_habitats USING GIST (geometr
  * ----------------
  * Materialized view to return the relevant_species table, 
  * a union of all the relevant parts of habitat areas related to the same species in an assessment area.
+ *
+ * When determining the average coverage for a relevant species, the weighted relevant habitat coverage is used.
  */
 CREATE MATERIALIZED VIEW relevant_species AS
 SELECT
