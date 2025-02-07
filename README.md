@@ -1,0 +1,30 @@
+# Database Modules
+
+## Description
+The `database-modules` is a repository for all common database objects (SQL structure) and data (loading dbdata files) bundled into modules for reuse.
+
+## Standards 
+* The database objects and data of the modules should be stable. These may only be changed in exceptional circumstances.
+* Modules should be the smallest logical group of database objects and data.
+* It is not mandatory to load a module in its entirety. This can be taken into account in the design of the file structure. An example is the nature dataset where most of the dbdata files have been supplied and some have been derived from the supplied data to speed up the database build process.
+* Add only NL data. In contrast to UK only NL reuses a lot of data in different projects.
+* Dbdata files should have the recommended schema name as prefix. E.g. `nature.` or `grid.`.
+* Using `import_common_into_schema` you can choose the schema where the database objects or object data will be added to. But there really must be a good reason to deviate from the recommended schema name. Using `import_common` the database objects or data will be added to the `public` schema.
+
+## Current modules
+
+### Grid
+Just receptors and hexagons.
+
+### Nature_areas
+Natura2000 areas and there properties like geometry, authority and directive.
+
+### Nature_areas_and_species
+Habitats and there properties like the conservation goals, critical load and the species present.<br />
+In this module is possible to load only the supplied data `supplied_<dataset_year>.sql`, or the entire dataset `dataset__<dataset_year>.sql>` including the derived (generated) data.
+
+### Build_nature
+All the functionality for generating and storing the derived data.
+
+### Aerius-general
+Some common AERIUS functionality that is too AERIUS specific for the [`database-build`](https://github.com/aerius/database-modules) common modules.
