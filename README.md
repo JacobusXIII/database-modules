@@ -6,6 +6,8 @@ The `database-modules` is a repository for all common database objects (SQL stru
 ## Standards 
 * The database objects and data of the modules should be stable. These may only be changed in exceptional circumstances.
 * Modules should be the smallest logical group of database objects and data.
+* Module names should start with the recommended schema name or `aerius` if the schema is fixed or irrelevant.
+* Module names may not containt dashes but only low dashed (underscores).
 * It is not mandatory to load a module in its entirety. This can be taken into account in the design of the file structure. An example is the nature dataset where most of the dbdata files have been supplied and some have been derived from the supplied data to speed up the database build process.
 * Add only NL data. In contrast to UK only NL reuses a lot of data in different projects.
 * Dbdata files should have the recommended schema name as prefix. E.g. `nature.` or `grid.`.
