@@ -4,7 +4,7 @@ CREATE EXTENSION postgis;
 {import_common 'database-build/essentials.sql'}
 {import_common 'database-build/toolbox.sql'}
 
-{import_common 'database-modules/aerius-general/'}
+{import_common 'database-modules/aerius_general/'}
 
 CREATE SCHEMA nature;
 
