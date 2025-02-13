@@ -38,7 +38,7 @@ $BODY$
 			FROM vector_tiles
 				INNER JOIN grid.hexagons ON ST_Intersects(vector_tiles.geometry, hexagons.geometry)
 
-			WHERE zoom_level IN (1, 3) -- TODO: add constant for zoom-levels
+			WHERE zoom_level = ANY(string_to_array(system.constant('RESULT_ZOOM_LEVELS'), ',')::int[])
 	),
 	unioned_intersected_areas AS (
 		SELECT
