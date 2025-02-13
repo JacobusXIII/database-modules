@@ -47,19 +47,21 @@ CREATE INDEX idx_receptors_to_critical_deposition_areas ON receptors_to_critical
 /*
  * receptors_to_relevant_habitats
  * ------------------------------
- * Table linking relevant habitats and hexagons (by receptor_id).
+ * Materialized view linking relevant habitats and hexagons (by receptor_id).
  *
  * @column cartographic_surface Surface for which the coverage is taken into account alongside the intersection of hexagon and critical deposition area.
  */
-CREATE TABLE receptors_to_relevant_habitats
-(
-	assessment_area_id integer NOT NULL,
-	critical_deposition_area_id integer NOT NULL,
-	receptor_id integer NOT NULL,
-	cartographic_surface posreal NOT NULL,
+CREATE MATERIALIZED VIEW receptors_to_relevant_habitats AS
+SELECT 
+	assessment_area_id, 
+	critical_deposition_area_id, 
+	receptor_id,
+	surface * receptor_habitat_coverage AS cartographic_surface
+	
+	FROM grid.receptors_to_critical_deposition_areas
+	
+	WHERE type = 'relevant_habitat'
+;
 
-	CONSTRAINT receptors_to_relevant_habitats_pkey PRIMARY KEY (assessment_area_id, critical_deposition_area_id, receptor_id),
-	CONSTRAINT receptors_to_relevant_habitats_fkey_receptors FOREIGN KEY (receptor_id) REFERENCES receptors
-);
-
+CREATE UNIQUE INDEX idx_receptors_to_relevant_habitats_ids ON receptors_to_relevant_habitats (assessment_area_id, critical_deposition_area_id, receptor_id);
 CREATE INDEX idx_receptors_to_relevant_habitats ON receptors_to_relevant_habitats (receptor_id);
