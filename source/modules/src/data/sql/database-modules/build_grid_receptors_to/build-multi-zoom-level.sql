@@ -35,4 +35,3 @@ BEGIN;
 		WHERE assessment_area_id = {assessment_area_id};
 {/multithread}
 COMMIT;
-

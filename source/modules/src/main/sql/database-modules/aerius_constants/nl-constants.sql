@@ -26,4 +26,4 @@ INSERT INTO system.constants (key, value) VALUES ('CALCULATOR_GRID_BOUNDARY_BOX'
 /**
  * The zoom-levels for which deposition results are available.
  */
-INSERT INTO system.constants (key, value) VALUES ('RESULT_ZOOM_LEVELS', '1,3');
+INSERT INTO system.constants (key, value) VALUES ('RESULT_ZOOM_LEVELS', '1');

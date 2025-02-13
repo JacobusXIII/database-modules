@@ -28,5 +28,5 @@ CREATE SCHEMA grid;
 {import_common 'database-modules/build_grid/'}
 
 -- -- Receptors-to lookup tables
-{import_common_into_schema 'database-modules/grid_receptors_to/multi-zoom-level/', 'grid'}
+{import_common_into_schema 'database-modules/grid_receptors_to/single-zoom-level.sql', 'grid'}
 {import_common 'database-modules/build_grid_receptors_to/'}
