@@ -1,7 +1,7 @@
 /*
  * ae_determine_hexagon_intersections
  * ----------------------------------
- * Function to determine the intersections of our hexagons (at zoom level 10 with a supplied geometry.
+ * Function to determine the intersections of our hexagons with a supplied geometry.
  * This is based on the hexagons in the hexagons table, not every possible hexagons imaginable.
  * Inspired by https://web.archive.org/web/20150504125339/http://dimensionaledge.com/intro-vector-tiling-map-reduce-postgis/.
  * @param v_geometry The geometry to determine intersects for.
@@ -69,7 +69,7 @@ LANGUAGE sql VOLATILE;
  * Function to determine the average coverage for a critical deposition area on a receptor. This can be either a habitat or a relevant habitat.
  *
  * The coverages of the intersecting (relevant) habitat areas is retrieved, and these combined into a weighted average per habitat.
- * Weight is based on the surface of the intersection between habitat area and the hexagon at zoom levl 1.
+ * Weight is based on the surface of the intersection between habitat area and the hexagon at the given zoom level.
  *
  * The multiplication of this intersection-surface and the average coverage results in the cartographic surface (gekarteerde oppervlakte) of the
  * critical deposition area on this receptor.
