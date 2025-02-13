@@ -5,6 +5,7 @@ CREATE EXTENSION postgis;
 {import_common 'database-build/toolbox.sql'}
 
 {import_common 'database-modules/aerius_general/'}
+{import_common 'database-modules/aerius_constants/nl-constants.sql'}
 
 --
 -- Nature

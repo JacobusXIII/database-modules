@@ -1,4 +1,19 @@
 /*
+ * ae_get_calculator_grid_boundary_box
+ * -----------------------------------
+ * Function returning the bounding box for calculator, based on the CALCULATOR_GRID_BOUNDARY_BOX constant value.
+ */
+CREATE OR REPLACE FUNCTION grid.ae_get_calculator_grid_boundary_box()
+	RETURNS Box2D AS
+$BODY$
+BEGIN
+	RETURN Box2D(ST_GeomFromText(system.constant('CALCULATOR_GRID_BOUNDARY_BOX'), ae_get_srid()));
+END;
+$BODY$
+LANGUAGE plpgsql IMMUTABLE;
+
+
+/*
  * ae_create_square
  * ----------------
  * Create a square geometry based on a central point and the size of each edge.
