@@ -19,7 +19,7 @@ The `database-modules` is a repository for all common database objects (SQL stru
 Just receptors and hexagons.
 
 ### Nature_areas
-Natura2000 areas and there properties like geometry, authority and directive.
+Natura2000 areas and their properties like geometry, authority and directive.
 
 ### Nature_areas_and_species
 Habitats and their properties like the conservation goals, critical load and the species present.
