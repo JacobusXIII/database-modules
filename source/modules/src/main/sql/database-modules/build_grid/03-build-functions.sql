@@ -142,16 +142,24 @@ BEGIN
 	ALTER TABLE grid.hexagons
 		DROP CONSTRAINT hexagons_fkey_receptors;
 
+	-- first add all RESULT_ZOOM_LEVELS hexagons that intersect with the geometry of interest
 	INSERT INTO grid.hexagons
 		SELECT DISTINCT receptor_id, zoom_level, tmp_hexagons.geometry
- 
-		FROM tmp_hexagons
-			INNER JOIN grid.geometry_of_interests ON ST_Intersects(tmp_hexagons.geometry, geometry_of_interests.geometry);
+			FROM tmp_hexagons
+				INNER JOIN grid.geometry_of_interests ON ST_Intersects(tmp_hexagons.geometry, geometry_of_interests.geometry)
+			WHERE zoom_level = ANY(string_to_array(system.constant('RESULT_ZOOM_LEVELS'), ',')::int[]);
+
+	-- second add all non RESULT_ZOOM_LEVELS hexagons based on the receptor id's of the added RESULT_ZOOM_LEVELS hexagons
+	INSERT INTO grid.hexagons
+		SELECT DISTINCT receptor_id, tmp_hexagons.zoom_level, tmp_hexagons.geometry
+			FROM grid.hexagons
+				INNER JOIN tmp_hexagons USING (receptor_id)
+			WHERE tmp_hexagons.zoom_level != ALL(string_to_array(system.constant('RESULT_ZOOM_LEVELS'), ',')::int[]);
 
 	INSERT INTO grid.receptors 
 		SELECT DISTINCT receptor_id, tmp_receptors.geometry
-		FROM tmp_receptors 
-			INNER JOIN grid.hexagons USING (receptor_id);
+			FROM tmp_receptors 
+				INNER JOIN grid.hexagons USING (receptor_id);
 
 	ALTER TABLE grid.hexagons
 		ADD CONSTRAINT hexagons_fkey_receptors FOREIGN KEY (receptor_id) REFERENCES grid.receptors;
