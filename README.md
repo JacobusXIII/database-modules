@@ -28,5 +28,5 @@ In this module it is possible to load only the supplied data through `supplied_<
 ### Build_nature
 All the functionality for generating and storing the derived data.
 
-### Aerius-general
+### Aerius_general
 Some common AERIUS functionality that is too AERIUS specific for the [`database-build`](https://github.com/aerius/database-build) common modules.
