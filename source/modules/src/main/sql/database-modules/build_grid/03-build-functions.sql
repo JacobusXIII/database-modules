@@ -94,8 +94,8 @@ LANGUAGE plpgsql VOLATILE;
 /*
  * ae_build_hexagons_and_receptors
  * -------------------------------
- * Vult de hexagons tabel met alle hexagonen die de area_of_interests raken.
- * De receptor_id's van deze hexagonen zorgen voor de vulling van de receptors tabel.
+ * Function to determine (and fill) the hexagons table with hexagons that intersects with the geometry of interests.
+ * The recetors tabel is filled, based on the hexagons data, as well.
  */
 CREATE OR REPLACE FUNCTION grid.ae_build_hexagons_and_receptors()
 	RETURNS void AS
