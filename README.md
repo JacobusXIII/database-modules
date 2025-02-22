@@ -15,8 +15,11 @@ The `database-modules` is a repository for all common database objects (SQL stru
 
 ## Current modules
 
-### Grid
-Just receptors and hexagons.
+### Aerius_general
+Some common AERIUS functionality that is too AERIUS specific for the [`database-build`](https://github.com/aerius/database-build) common modules.
+
+### Aerius_constants
+The default AERIUS constants.
 
 ### Nature_areas
 Natura2000 areas and their properties like geometry, authority and directive.
@@ -25,8 +28,19 @@ Natura2000 areas and their properties like geometry, authority and directive.
 Habitats and their properties like the conservation goals, critical load and the species present.
 In this module it is possible to load only the supplied data through `supplied_<dataset_year>.sql`, or the entire dataset through `dataset_<dataset_year>.sql>` including the derived (generated) data.
 
+### Grid
+Just receptors and hexagons.
+
+### Grid_receptors_to
+The common receptors_to lookup tables. There are two variants of the lookup tables. Besides the single zoom level implementation there is also a multi-zoom level implementation for when there are calculation results for multiple zoom levels (and the zoom level is part of the primary key).
+Select the desired variant, in the module, by importing the specific sql.
+Currently, data has only been added for the single zoom level variant.
+
 ### Build_nature
 All the functionality for generating and storing the derived data.
 
-### Aerius_general
-Some common AERIUS functionality that is too AERIUS specific for the [`database-build`](https://github.com/aerius/database-build) common modules.
+### Build_grid
+All the functionality for generating and storing the receptors and hexagons.
+
+### Build_grid_receptors_to
+All the functionality for generating and storing the receptors_to lookup tables.
