@@ -44,3 +44,9 @@ All the functionality for generating and storing the receptors and hexagons.
 
 ### Build_grid_receptors_to
 All the functionality for generating and storing the receptors_to lookup tables.
+
+
+## Image build
+There are two scripts for building the Docker images.
+* [`update.sh`](update.sh) - Creates the Dockerfile files for the specified Database-build versions.
+* [`build_images.sh`](build_images.sh) - Builds all generated Dockerfile files.

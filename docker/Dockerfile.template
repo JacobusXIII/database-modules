@@ -1,0 +1,5 @@
+# syntax = docker/dockerfile:1
+FROM nexus-docker.aerius.nl/database-build:%%DATABASE_BUILD_VERSION%%
+
+# Copy the database-modules source into the image
+COPY source/modules/ /source/database-modules
