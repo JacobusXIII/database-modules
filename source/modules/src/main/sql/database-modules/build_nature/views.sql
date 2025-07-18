@@ -66,7 +66,7 @@ SELECT
  * the habitat area should also be 'definitief', or at least 1 of the species in the habitat should be 'definitief'.
  * When the directive area is in the design ('ontwerp') status, then the habitats or species are not required to be 'definitief'.
  */
-CREATE OR REPLACE VIEW nature.build_relevant_habitat_areas_view AS
+CREATE OR REPLACE VIEW build_relevant_habitat_areas_view AS
 WITH natura2000_directive_area_properties AS (
 	SELECT
 		natura2000_directive_area_id,
@@ -101,11 +101,11 @@ SELECT * FROM
 
 				FROM nature.habitat_areas
 					INNER JOIN nature.habitat_types USING (habitat_type_id)
-					INNER JOIN habitat_type_sensitivity_view USING (habitat_type_id)
+					INNER JOIN nature.habitat_type_sensitivity_view USING (habitat_type_id)
 					INNER JOIN natura2000_directive_area_properties USING (assessment_area_id)
 					INNER JOIN nature.habitat_type_relations USING (habitat_type_id)
 					LEFT JOIN nature.habitat_properties USING (goal_habitat_type_id, assessment_area_id)
-					LEFT JOIN designated_habitats_view USING (habitat_type_id, assessment_area_id)
+					LEFT JOIN nature.designated_habitats_view USING (habitat_type_id, assessment_area_id)
 
 				WHERE
 					sensitive IS TRUE
@@ -128,9 +128,9 @@ SELECT * FROM
 				habitat_areas.geometry AS habitat_area_geometry
 
 				FROM nature.habitat_areas
-					INNER JOIN habitat_type_sensitivity_view USING (habitat_type_id)
+					INNER JOIN nature.habitat_type_sensitivity_view USING (habitat_type_id)
 					INNER JOIN natura2000_directive_area_properties USING (assessment_area_id)
-					INNER JOIN designated_species_to_habitats_view USING (assessment_area_id, habitat_type_id)
+					INNER JOIN nature.designated_species_to_habitats_view USING (assessment_area_id, habitat_type_id)
 					INNER JOIN nature.species USING (species_id)
 					INNER JOIN nature.species_properties USING (species_id, assessment_area_id)
 

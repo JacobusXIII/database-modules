@@ -3,7 +3,7 @@
  * ----------------------------------------
  * View to fill the receptors_to_assessment_areas table.
  */
-CREATE OR REPLACE VIEW grid.build_receptors_to_assessment_areas_view AS
+CREATE OR REPLACE VIEW build_receptors_to_assessment_areas_view AS
 SELECT
 	assessment_area_id,
 	(grid.ae_determine_hexagon_intersections(geometry)).receptor_id,
@@ -24,7 +24,7 @@ SELECT
  * The coverage of the habitat on each receptor is calculated by looking at the intersection of the habitat areas that intersect the receptor.
  * See {@link ae_determine_habitat_coverage_on_hexagon} for the calculation method.
  */
-CREATE OR REPLACE VIEW grid.build_receptors_to_critical_deposition_areas_view AS
+CREATE OR REPLACE VIEW build_receptors_to_critical_deposition_areas_view AS
 SELECT
 	assessment_area_id,
 	type,

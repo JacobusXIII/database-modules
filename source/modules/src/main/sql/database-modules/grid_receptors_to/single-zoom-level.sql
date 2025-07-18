@@ -58,7 +58,7 @@ SELECT
 	receptor_id,
 	surface * receptor_habitat_coverage AS cartographic_surface
 	
-	FROM grid.receptors_to_critical_deposition_areas
+	FROM receptors_to_critical_deposition_areas
 	
 	WHERE type = 'relevant_habitat'
 ;

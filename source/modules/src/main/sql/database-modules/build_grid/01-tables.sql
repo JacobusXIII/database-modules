@@ -3,7 +3,7 @@
  * ---------------------
  * Table containing provincial land borders (excluding water).
  */
-CREATE TABLE grid.province_land_borders (
+CREATE TABLE province_land_borders (
 	province_land_border_id integer NOT NULL,
 	name text NOT NULL,
 	geometry geometry(MultiPolygon),
@@ -12,7 +12,7 @@ CREATE TABLE grid.province_land_borders (
 	CONSTRAINT province_land_borders_name_unique UNIQUE (name)
 );
 
-CREATE INDEX province_land_borders_geometry_gist ON grid.province_land_borders USING GIST (geometry);
+CREATE INDEX province_land_borders_geometry_gist ON province_land_borders USING GIST (geometry);
 
 
 /*
@@ -21,11 +21,11 @@ CREATE INDEX province_land_borders_geometry_gist ON grid.province_land_borders U
  * Table containing the geometry of interest per assessment area.
  * Based on these geometries the receptors are created.
  */
-CREATE TABLE grid.geometry_of_interests (
+CREATE TABLE geometry_of_interests (
 	assessment_area_id integer NOT NULL,
 	geometry geometry(MultiPolygon),
 
 	CONSTRAINT geometry_of_interests_pkey PRIMARY KEY (assessment_area_id)
 );
 
-CREATE INDEX geometry_of_interests_geometry_gist ON grid.geometry_of_interests USING GIST (geometry);
+CREATE INDEX geometry_of_interests_geometry_gist ON geometry_of_interests USING GIST (geometry);

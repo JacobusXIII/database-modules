@@ -3,7 +3,7 @@
  * -----------------------------------
  * Function returning the bounding box for calculator, based on the CALCULATOR_GRID_BOUNDARY_BOX constant value.
  */
-CREATE OR REPLACE FUNCTION grid.ae_get_calculator_grid_boundary_box()
+CREATE OR REPLACE FUNCTION ae_get_calculator_grid_boundary_box()
 	RETURNS Box2D AS
 $BODY$
 BEGIN
@@ -19,7 +19,7 @@ LANGUAGE plpgsql IMMUTABLE;
  * Create a square geometry based on a central point and the size of each edge.
  * Inspired by https://web.archive.org/web/20150504125339/http://dimensionaledge.com/intro-vector-tiling-map-reduce-postgis/
  */
-CREATE OR REPLACE FUNCTION grid.ae_create_square(centerpoint geometry, side double precision)
+CREATE OR REPLACE FUNCTION ae_create_square(centerpoint geometry, side double precision)
 	RETURNS geometry AS
 $BODY$
 SELECT ST_SetSRID(ST_MakePolygon(ST_MakeLine(
@@ -41,7 +41,7 @@ LANGUAGE sql IMMUTABLE STRICT;
  * Create a standard grid based on a geometry, where each square in the grid has the same size (through side, the size of each edge).
  * Inspired by https://web.archive.org/web/20150504125339/http://dimensionaledge.com/intro-vector-tiling-map-reduce-postgis/
  */
-CREATE OR REPLACE FUNCTION grid.ae_create_regular_grid(extent geometry, side double precision)
+CREATE OR REPLACE FUNCTION ae_create_regular_grid(extent geometry, side double precision)
 	RETURNS setof geometry AS
 $BODY$
 DECLARE
