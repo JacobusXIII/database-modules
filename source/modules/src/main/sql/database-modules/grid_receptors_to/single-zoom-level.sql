@@ -56,6 +56,8 @@ SELECT
 	assessment_area_id, 
 	critical_deposition_area_id, 
 	receptor_id,
+	surface,
+	receptor_habitat_coverage,
 	surface * receptor_habitat_coverage AS cartographic_surface
 	
 	FROM receptors_to_critical_deposition_areas
