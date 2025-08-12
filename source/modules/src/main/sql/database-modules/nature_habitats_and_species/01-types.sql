@@ -27,14 +27,6 @@ CREATE TYPE species_type AS ENUM
 	('habitat_species', 'breeding_bird_species', 'non_breeding_bird_species');
 
 /*
- * critical_deposition_area_type
- * -----------------------------
- * The type of a critical deposition area.
- */
-CREATE TYPE critical_deposition_area_type AS ENUM
-	('relevant_habitat', 'habitat');
-
-/*
  * critical_deposition_classification
  * ----------------------------------
  * Enum type for critical load (KDW, Kritische Depositie Waarde) classifications.

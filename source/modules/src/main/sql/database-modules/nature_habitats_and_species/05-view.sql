@@ -90,7 +90,7 @@ SELECT
 CREATE OR REPLACE VIEW critical_deposition_areas_view AS
 SELECT
 	assessment_area_id,
-	'habitat'::critical_deposition_area_type AS type,
+	'habitat'::public.critical_deposition_area_type AS type,
 	habitat_type_id AS critical_deposition_area_id,
 	name,
 	description,
@@ -102,7 +102,7 @@ SELECT
 UNION ALL
 SELECT
 	assessment_area_id,
-	'relevant_habitat'::critical_deposition_area_type AS type,
+	'relevant_habitat'::public.critical_deposition_area_type AS type,
 	habitat_type_id AS critical_deposition_area_id,
 	name,
 	description,

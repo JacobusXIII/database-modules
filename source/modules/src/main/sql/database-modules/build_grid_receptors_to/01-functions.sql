@@ -77,7 +77,7 @@ LANGUAGE sql VOLATILE;
  *
  * @returns Average coveragefraction for a habitat on a receptor, weighted by surface of the intersections between habitat areas and hexagon.
  */
-CREATE OR REPLACE FUNCTION ae_determine_habitat_coverage_on_hexagon(v_assessment_area_id integer, v_type nature.critical_deposition_area_type, v_habitat_type_id integer, v_receptor_id integer, v_zoom_level integer)
+CREATE OR REPLACE FUNCTION ae_determine_habitat_coverage_on_hexagon(v_assessment_area_id integer, v_type public.critical_deposition_area_type, v_habitat_type_id integer, v_receptor_id integer, v_zoom_level integer)
 	RETURNS fraction AS
 $BODY$
 	WITH hexagon AS (SELECT geometry FROM grid.hexagons WHERE receptor_id = v_receptor_id AND zoom_level = v_zoom_level)
