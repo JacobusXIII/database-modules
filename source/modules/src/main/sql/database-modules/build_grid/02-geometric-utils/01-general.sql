@@ -69,7 +69,7 @@ BEGIN
 			centerpoint := ST_SetSRID(ST_MakePoint(x_value, y_value), srid);
 			x_count := x_count + 1;
 			x_value := x_value + side;
-			RETURN QUERY SELECT ST_SnapToGrid(grid.ae_create_square(centerpoint, side), 0.000001);
+			RETURN QUERY SELECT ST_SnapToGrid(ae_create_square(centerpoint, side), 0.000001);
 		END LOOP;  -- after exiting the subloop, increment the y count and y value
 		y_count := y_count + 1;
 		y_value := y_value - side;

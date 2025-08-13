@@ -3,7 +3,7 @@
  * -----------------
  * Function to calculate and return a hexagon for the supplied receptor_id and zoom_level.
  */
-CREATE OR REPLACE FUNCTION grid.ae_create_hexagon(receptor_id posint, zoom_level posint)
+CREATE OR REPLACE FUNCTION ae_create_hexagon(receptor_id posint, zoom_level posint)
 	RETURNS geometry AS
 $BODY$
 DECLARE
@@ -44,7 +44,7 @@ DECLARE
 BEGIN
 	SELECT ST_X(ae_determine_coordinates_from_receptor_id), ST_Y(ae_determine_coordinates_from_receptor_id)
 		INTO x_offset, y_offset
-		FROM grid.ae_determine_coordinates_from_receptor_id(receptor_id);
+		FROM ae_determine_coordinates_from_receptor_id(receptor_id);
 
 	-- Initialise
 	surface_zoom_level_1	= system.constant('SURFACE_ZOOM_LEVEL_1')::integer;

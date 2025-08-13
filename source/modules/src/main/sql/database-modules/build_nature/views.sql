@@ -9,8 +9,8 @@ SELECT
 	assessment_area_id,
 	habitat_type_id
 
-	FROM nature.habitat_properties
- 		INNER JOIN nature.habitat_type_relations USING (goal_habitat_type_id)
+	FROM habitat_properties
+ 		INNER JOIN habitat_type_relations USING (goal_habitat_type_id)
 
 	WHERE NOT (quality_goal = 'none' AND extent_goal = 'none')
 ;
@@ -26,7 +26,7 @@ SELECT
 	habitat_type_id,
 	bool_or(sensitive) AS sensitive
 
-	FROM nature.habitat_type_critical_levels
+	FROM habitat_type_critical_levels
 
 	GROUP BY habitat_type_id
 ;
@@ -44,9 +44,9 @@ SELECT
 	assessment_area_id,
 	habitat_type_id
 
-	FROM nature.species_to_habitats
-		INNER JOIN nature.habitat_type_relations USING (goal_habitat_type_id)
-		INNER JOIN nature.designated_species USING (species_id, assessment_area_id)
+	FROM species_to_habitats
+		INNER JOIN habitat_type_relations USING (goal_habitat_type_id)
+		INNER JOIN designated_species USING (species_id, assessment_area_id)
 ;
 
 
@@ -76,9 +76,9 @@ WITH natura2000_directive_area_properties AS (
 		design_status AS natura2000_directive_area_design_status,
 		geometry
 
-		FROM nature.natura2000_directive_areas
-			INNER JOIN nature.natura2000_directives USING (natura2000_directive_id)
-			INNER JOIN nature.natura2000_area_properties USING (natura2000_area_id)
+		FROM natura2000_directive_areas
+			INNER JOIN natura2000_directives USING (natura2000_directive_id)
+			INNER JOIN natura2000_area_properties USING (natura2000_area_id)
 )
 SELECT * FROM
 	(SELECT
@@ -99,13 +99,13 @@ SELECT * FROM
 				natura2000_directive_area_properties.geometry AS natura2000_directive_area_geometry,
 				habitat_areas.geometry AS habitat_area_geometry
 
-				FROM nature.habitat_areas
-					INNER JOIN nature.habitat_types USING (habitat_type_id)
-					INNER JOIN nature.habitat_type_sensitivity_view USING (habitat_type_id)
+				FROM habitat_areas
+					INNER JOIN habitat_types USING (habitat_type_id)
+					INNER JOIN habitat_type_sensitivity_view USING (habitat_type_id)
 					INNER JOIN natura2000_directive_area_properties USING (assessment_area_id)
-					INNER JOIN nature.habitat_type_relations USING (habitat_type_id)
-					LEFT JOIN nature.habitat_properties USING (goal_habitat_type_id, assessment_area_id)
-					LEFT JOIN nature.designated_habitats_view USING (habitat_type_id, assessment_area_id)
+					INNER JOIN habitat_type_relations USING (habitat_type_id)
+					LEFT JOIN habitat_properties USING (goal_habitat_type_id, assessment_area_id)
+					LEFT JOIN designated_habitats_view USING (habitat_type_id, assessment_area_id)
 
 				WHERE
 					sensitive IS TRUE
@@ -127,12 +127,12 @@ SELECT * FROM
 				natura2000_directive_area_properties.geometry AS natura2000_directive_area_geometry,
 				habitat_areas.geometry AS habitat_area_geometry
 
-				FROM nature.habitat_areas
-					INNER JOIN nature.habitat_type_sensitivity_view USING (habitat_type_id)
+				FROM habitat_areas
+					INNER JOIN habitat_type_sensitivity_view USING (habitat_type_id)
 					INNER JOIN natura2000_directive_area_properties USING (assessment_area_id)
-					INNER JOIN nature.designated_species_to_habitats_view USING (assessment_area_id, habitat_type_id)
-					INNER JOIN nature.species USING (species_id)
-					INNER JOIN nature.species_properties USING (species_id, assessment_area_id)
+					INNER JOIN designated_species_to_habitats_view USING (assessment_area_id, habitat_type_id)
+					INNER JOIN species USING (species_id)
+					INNER JOIN species_properties USING (species_id, assessment_area_id)
 
 				WHERE
 					sensitive IS TRUE

@@ -7,7 +7,7 @@
  * For NL this buffer (as defined by a constant) is 170m.
  * For UK this buffer (as defined by a constant) is 850m.
  */
-CREATE OR REPLACE FUNCTION grid.ae_assessment_area_geometry_of_interest(v_assessment_area_id integer, v_land_geometry geometry)
+CREATE OR REPLACE FUNCTION ae_assessment_area_geometry_of_interest(v_assessment_area_id integer, v_land_geometry geometry)
 	RETURNS geometry AS
 $BODY$
 DECLARE
@@ -62,21 +62,21 @@ LANGUAGE plpgsql VOLATILE;
  * Function to determine (and fill) the geometry of interests for all assessment areas.
  * This function has to be run before creating receptors.
  */
-CREATE OR REPLACE FUNCTION grid.ae_build_geometry_of_interests()
+CREATE OR REPLACE FUNCTION ae_build_geometry_of_interests()
 	RETURNS void AS
 $BODY$
 DECLARE
 	v_land_geometry geometry;
 BEGIN
 	RAISE NOTICE '[%] Generating land geometry...', to_char(clock_timestamp(), 'DD-MM-YYYY HH24:MI:SS.MS');
-	v_land_geometry := (SELECT ST_Union(geometry) FROM grid.province_land_borders);
+	v_land_geometry := (SELECT ST_Union(geometry) FROM province_land_borders);
 
 	RAISE NOTICE '[%] Generating all geometry of interests...', to_char(clock_timestamp(), 'DD-MM-YYYY HH24:MI:SS.MS');
-	INSERT INTO grid.geometry_of_interests(assessment_area_id, geometry)
+	INSERT INTO geometry_of_interests(assessment_area_id, geometry)
 	SELECT * FROM
 		(SELECT
 			assessment_area_id,
-			ST_Multi(grid.ae_assessment_area_geometry_of_interest(assessment_area_id, v_land_geometry)) AS geometry
+			ST_Multi(ae_assessment_area_geometry_of_interest(assessment_area_id, v_land_geometry)) AS geometry
 
 			FROM
 				(SELECT assessment_area_id FROM nature.assessment_areas WHERE type = 'natura2000_area' ORDER BY assessment_area_id) AS assessment_area_ids
@@ -97,7 +97,7 @@ LANGUAGE plpgsql VOLATILE;
  * Function to determine (and fill) the hexagons table with hexagons that intersects with the geometry of interests.
  * The recetors tabel is filled, based on the hexagons data, as well.
  */
-CREATE OR REPLACE FUNCTION grid.ae_build_hexagons_and_receptors()
+CREATE OR REPLACE FUNCTION ae_build_hexagons_and_receptors()
 	RETURNS void AS
 $BODY$
 DECLARE
@@ -119,50 +119,50 @@ BEGIN
 		floor(ST_YMin(boundary))::int AS coordinate_y_lower,
 		ceiling(ST_YMax(boundary))::int AS coordinate_y_upper
 
-		FROM grid.ae_get_calculator_grid_boundary_box() AS boundary
+		FROM ae_get_calculator_grid_boundary_box() AS boundary
 	), receptor_ids AS (
 	SELECT 
-		grid.ae_determine_receptor_ids_in_rectangle(coordinate_x_left, coordinate_x_right, coordinate_y_lower, coordinate_y_upper) AS receptor_id
+		ae_determine_receptor_ids_in_rectangle(coordinate_x_left, coordinate_x_right, coordinate_y_lower, coordinate_y_upper) AS receptor_id
 
 		FROM boundary
 	)
 	INSERT INTO tmp_receptors (receptor_id, geometry)
-		SELECT receptor_id, grid.ae_determine_coordinates_from_receptor_id(receptor_id) FROM receptor_ids;
+		SELECT receptor_id, ae_determine_coordinates_from_receptor_id(receptor_id) FROM receptor_ids;
 
 
 	FOR v_zoom_level IN 1..v_max_zoom_level LOOP
 		INSERT INTO tmp_hexagons
-		SELECT receptor_id, v_zoom_level, grid.ae_create_hexagon(receptor_id, v_zoom_level)
+		SELECT receptor_id, v_zoom_level, ae_create_hexagon(receptor_id, v_zoom_level)
 			FROM tmp_receptors
 			WHERE
 				v_zoom_level = 1
-				OR grid.ae_is_receptor_id_available_on_zoomlevel(receptor_id, v_zoom_level);
+				OR ae_is_receptor_id_available_on_zoomlevel(receptor_id, v_zoom_level);
 	END LOOP;
 
-	ALTER TABLE grid.hexagons
+	ALTER TABLE hexagons
 		DROP CONSTRAINT hexagons_fkey_receptors;
 
 	-- first add all RESULT_ZOOM_LEVELS hexagons that intersect with the geometry of interest
-	INSERT INTO grid.hexagons
+	INSERT INTO hexagons
 		SELECT DISTINCT receptor_id, zoom_level, tmp_hexagons.geometry
 			FROM tmp_hexagons
-				INNER JOIN grid.geometry_of_interests ON ST_Intersects(tmp_hexagons.geometry, geometry_of_interests.geometry)
+				INNER JOIN geometry_of_interests ON ST_Intersects(tmp_hexagons.geometry, geometry_of_interests.geometry)
 			WHERE zoom_level = ANY(string_to_array(system.constant('RESULT_ZOOM_LEVELS'), ',')::int[]);
 
 	-- second add all non RESULT_ZOOM_LEVELS hexagons based on the receptor id's of the added RESULT_ZOOM_LEVELS hexagons
-	INSERT INTO grid.hexagons
+	INSERT INTO hexagons
 		SELECT DISTINCT receptor_id, tmp_hexagons.zoom_level, tmp_hexagons.geometry
-			FROM grid.hexagons
+			FROM hexagons
 				INNER JOIN tmp_hexagons USING (receptor_id)
 			WHERE tmp_hexagons.zoom_level != ALL(string_to_array(system.constant('RESULT_ZOOM_LEVELS'), ',')::int[]);
 
-	INSERT INTO grid.receptors 
+	INSERT INTO receptors 
 		SELECT DISTINCT receptor_id, tmp_receptors.geometry
 			FROM tmp_receptors 
-				INNER JOIN grid.hexagons USING (receptor_id);
+				INNER JOIN hexagons USING (receptor_id);
 
-	ALTER TABLE grid.hexagons
-		ADD CONSTRAINT hexagons_fkey_receptors FOREIGN KEY (receptor_id) REFERENCES grid.receptors;
+	ALTER TABLE hexagons
+		ADD CONSTRAINT hexagons_fkey_receptors FOREIGN KEY (receptor_id) REFERENCES receptors;
 
 	RAISE NOTICE '[%] Done.', to_char(clock_timestamp(), 'DD-MM-YYYY HH24:MI:SS.MS');
 END;

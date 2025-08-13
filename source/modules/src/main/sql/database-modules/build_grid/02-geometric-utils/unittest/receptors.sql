@@ -8,7 +8,7 @@
  * - The resulting ID should match the original ID used.
  * This is done 100 times.
  */
-CREATE OR REPLACE FUNCTION grid.ae_unittest_determine_receptor_id_from_coordinates_from_receptor_id()
+CREATE OR REPLACE FUNCTION ae_unittest_determine_receptor_id_from_coordinates_from_receptor_id()
 	RETURNS void AS
 $BODY$
 DECLARE
@@ -21,8 +21,8 @@ DECLARE
 BEGIN
 	WHILE (loop_iterator < 100) LOOP
 		random_receptor_id 	:= round(max_receptors * random())::int;
-		geometry_from_function	:= grid.ae_determine_coordinates_from_receptor_id(random_receptor_id);
-		calculated_receptor_id	:= grid.ae_determine_receptor_id_from_coordinates(round(ST_X(geometry_from_function))::int, round(ST_Y(geometry_from_function))::int,1);
+		geometry_from_function	:= ae_determine_coordinates_from_receptor_id(random_receptor_id);
+		calculated_receptor_id	:= ae_determine_receptor_id_from_coordinates(round(ST_X(geometry_from_function))::int, round(ST_Y(geometry_from_function))::int,1);
 
 		PERFORM system.assert_equals(random_receptor_id, calculated_receptor_id);
 
@@ -40,7 +40,7 @@ LANGUAGE plpgsql STABLE;
  * When the borders are correctly incorporated, the vertical projection of the receptors shouldn't contain any 'holes' or 'gaps'.
  * This is done 100 times.
  */
-CREATE OR REPLACE FUNCTION grid.ae_unittest_determine_receptor_ids_from_receptor_with_radius()
+CREATE OR REPLACE FUNCTION ae_unittest_determine_receptor_ids_from_receptor_with_radius()
 	RETURNS void AS
 $BODY$
 DECLARE
@@ -62,7 +62,7 @@ BEGIN
 		radius		:= 1 + (round(max_radius * random()))::int;
 		-- The perpendicular projection of the receptor_ids is done by taking the distinct numbers modulo the number of hexagons horizontally.
 		CREATE TEMPORARY TABLE tmp_calculated_receptor_ids AS SELECT DISTINCT ((receptor_id_calc - 1) % 1529 + 1) AS vert_proj
-					FROM grid.ae_determine_receptor_ids_from_receptor_with_radius(receptor_id, radius) AS receptor_id_calc
+					FROM ae_determine_receptor_ids_from_receptor_with_radius(receptor_id, radius) AS receptor_id_calc
 					ORDER BY vert_proj ASC;
 		number_of_distinct_rows 	:= count(*) FROM tmp_calculated_receptor_ids;
 		first_vertically_projected 	:= vert_proj FROM tmp_calculated_receptor_ids ORDER BY vert_proj ASC LIMIT 1;
@@ -92,7 +92,7 @@ LANGUAGE plpgsql VOLATILE;
  * - The resulting ID should match the ID of the zoom lvel 1 hexagon.
  * This is done 1000 times.
  */
-CREATE OR REPLACE FUNCTION grid.ae_unittest_determine_receptor_id_from_coordinates()
+CREATE OR REPLACE FUNCTION ae_unittest_determine_receptor_id_from_coordinates()
 	RETURNS void AS
 $BODY$
 DECLARE
@@ -119,7 +119,7 @@ BEGIN
 		receptor_id_in_database := receptor_id FROM hexagons WHERE ST_Within(test_point, hexagons.geometry) AND zoom_level = 1;
 		-- Only count when there are receptors in the database
 		IF (receptor_id_in_database > 0) THEN
-			receptor_id_from_function = grid.ae_determine_receptor_id_from_coordinates(test_x_coordinate, test_y_coordinate, 1);
+			receptor_id_from_function = ae_determine_receptor_id_from_coordinates(test_x_coordinate, test_y_coordinate, 1);
 			PERFORM system.assert_equals(receptor_id_in_database, receptor_id_from_function);
 			no_loop_iterator = 0;
 			loop_iterator = loop_iterator + 1;
@@ -143,7 +143,7 @@ LANGUAGE plpgsql VOLATILE;
  * - The resulting lists should contain the same receptor_ids.
  * This is done 100 times.
  */
-CREATE OR REPLACE FUNCTION grid.ae_unittest_determine_receptor_ids_in_rectangle()
+CREATE OR REPLACE FUNCTION ae_unittest_determine_receptor_ids_in_rectangle()
 	RETURNS void AS
 $BODY$
 DECLARE
@@ -177,7 +177,7 @@ BEGIN
 		CREATE TEMPORARY TABLE tmp_postgis_receptor_ids AS SELECT receptor_id FROM receptors WHERE ST_Within (receptors.geometry, rectangle);
 
 		-- Get the receptors from the rectangle by the function. Get the intersection of these receptors and the receptors in the db. This intersection should be exactly the same the the receptors above, so there should be no distinct rows.
-		CREATE TEMPORARY TABLE tmp_calculated_receptor_ids AS SELECT grid.ae_determine_receptor_ids_in_rectangle(x_min_for_rectangle, x_max_for_rectangle, y_min_for_rectangle, y_max_for_rectangle) AS receptor_id_calc;
+		CREATE TEMPORARY TABLE tmp_calculated_receptor_ids AS SELECT ae_determine_receptor_ids_in_rectangle(x_min_for_rectangle, x_max_for_rectangle, y_min_for_rectangle, y_max_for_rectangle) AS receptor_id_calc;
 		CREATE TEMPORARY TABLE tmp_intersect_receptor_ids AS SELECT receptor_id AS receptor_id_inner FROM tmp_calculated_receptor_ids INNER JOIN receptors ON (receptor_id_calc = receptor_id);
 		CREATE TEMPORARY TABLE tmp_distinct_receptor_ids AS SELECT * FROM tmp_postgis_receptor_ids FULL OUTER JOIN tmp_intersect_receptor_ids ON (receptor_id = receptor_id_inner) WHERE receptor_id IS NULL OR receptor_id_inner IS NULL;
 		number_of_distinct_rows = count(*) FROM tmp_distinct_receptor_ids;
@@ -204,7 +204,7 @@ LANGUAGE plpgsql VOLATILE;
  * - Determines 20 random receptor_ids from the hexagons table for zoom levels 1 through 5.
  * - Then checks if ae_is_receptor_id_available_on_zoomlevel indicates if these receptors are indeed present on the zoom level for which they were selected.
  */
-CREATE OR REPLACE FUNCTION grid.ae_unittest_is_receptor_id_available_on_zoomlevel()
+CREATE OR REPLACE FUNCTION ae_unittest_is_receptor_id_available_on_zoomlevel()
 	RETURNS void AS
 $BODY$
 DECLARE
@@ -218,9 +218,9 @@ DECLARE
 	zoomlevel_test posint;
 BEGIN
 	--The first part of the test.
-	PERFORM system.assert_true(grid.ae_is_receptor_id_available_on_zoomlevel(input_1, 5), 'failed at receptor ' || input_1 || ' zoomlevel 5');
-	PERFORM system.assert_true(grid.ae_is_receptor_id_available_on_zoomlevel(input_2, 5), 'failed at receptor ' || input_2 || ' zoomlevel 5');
-	PERFORM system.assert_true(grid.ae_is_receptor_id_available_on_zoomlevel(input_3, 5), 'failed at receptor ' || input_3 || ' zoomlevel 5');
+	PERFORM system.assert_true(ae_is_receptor_id_available_on_zoomlevel(input_1, 5), 'failed at receptor ' || input_1 || ' zoomlevel 5');
+	PERFORM system.assert_true(ae_is_receptor_id_available_on_zoomlevel(input_2, 5), 'failed at receptor ' || input_2 || ' zoomlevel 5');
+	PERFORM system.assert_true(ae_is_receptor_id_available_on_zoomlevel(input_3, 5), 'failed at receptor ' || input_3 || ' zoomlevel 5');
 
 	--The second part of the test. The geometry_test table has 100 records, so the succes_counter must also reach 100.
 	CREATE TEMPORARY TABLE tmp_geometry_test ON COMMIT DROP AS SELECT receptor_id, zoom_level FROM hexagons WHERE zoom_level = 1 ORDER BY random() LIMIT 20;
@@ -231,7 +231,7 @@ BEGIN
 
 	FOR rec_id_test IN SELECT receptor_id FROM tmp_geometry_test LOOP
 		zoomlevel_test	:= zoom_level FROM tmp_geometry_test WHERE receptor_id = rec_id_test LIMIT 1;
-		PERFORM system.assert_true(grid.ae_is_receptor_id_available_on_zoomlevel(rec_id_test, zoomlevel_test), 'failed at receptor ' || rec_id_test || ' zoomlevel ' || zoomlevel_test);
+		PERFORM system.assert_true(ae_is_receptor_id_available_on_zoomlevel(rec_id_test, zoomlevel_test), 'failed at receptor ' || rec_id_test || ' zoomlevel ' || zoomlevel_test);
 	END LOOP;
 
 	DROP TABLE tmp_geometry_test;
@@ -248,7 +248,7 @@ LANGUAGE plpgsql VOLATILE;
  * - Then checks if ae_determine_coordinates_from_receptor_id returns the same geometry based on the receptor_id.
  * This is done 100 times.
  */
-CREATE OR REPLACE FUNCTION grid.ae_unittest_determine_coordinates_from_receptor_id()
+CREATE OR REPLACE FUNCTION ae_unittest_determine_coordinates_from_receptor_id()
 	RETURNS void AS
 $BODY$
 DECLARE
@@ -261,7 +261,7 @@ BEGIN
 		receptor_id_in_database := receptor_id FROM nature.receptors ORDER BY random() LIMIT 1;
 		geometry_in_database 	:= geometry FROM nature.receptors WHERE receptor_id = receptor_id_in_database;
 
-		PERFORM system.assert_equals(geometry_in_database, grid.ae_determine_coordinates_from_receptor_id(receptor_id_in_database), 'failed at receptor ' || receptor_id_in_database);
+		PERFORM system.assert_equals(geometry_in_database, ae_determine_coordinates_from_receptor_id(receptor_id_in_database), 'failed at receptor ' || receptor_id_in_database);
 		loop_iterator = loop_iterator + 1;
 	END LOOP;
 END;
