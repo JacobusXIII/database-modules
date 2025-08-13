@@ -12,19 +12,19 @@ CREATE OR REPLACE FUNCTION ae_determine_hexagon_intersections(v_geometry geometr
 $BODY$
 	WITH
 	split_geometry AS (
-		SELECT (ST_Dump(v_geometry)).geom AS geometry
+		SELECT (ST_Dump(v_geometry)).geom AS split_geometry
 	),
 	regular_grid AS (
-		SELECT ae_create_regular_grid(ST_Envelope(v_geometry), v_gridsize * 1000)::geometry(Polygon) AS geometry
+		SELECT ae_create_regular_grid(ST_Envelope(v_geometry), v_gridsize * 1000)::geometry(Polygon) AS regular_geometry
 	),
 	intersected AS (
 		SELECT
 			CASE
-				WHEN ST_Within(regular_geometry, split_geometry.geometry)
+				WHEN ST_Within(regular_geometry, split_geometry)
 				THEN regular_geometry
-				ELSE ST_Intersection(regular_geometry, split_geometry.geometry) END AS geometry
+				ELSE ST_Intersection(regular_geometry, split_geometry) END AS geometry
 			FROM regular_grid
-				INNER JOIN split_geometry ON ST_Intersects(regular_geometry, split_geometry.geometry) AND regular_geometry && split_geometry.geometry
+				INNER JOIN split_geometry ON ST_Intersects(regular_geometry, split_geometry) AND regular_geometry && split_geometry
 	),
 	vector_tiles AS (
 		SELECT (ST_Dump(intersected.geometry)).geom AS geometry	FROM intersected WHERE intersected.geometry IS NOT NULL
