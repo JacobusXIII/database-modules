@@ -27,9 +27,10 @@ CREATE SCHEMA grid;
 {import_common_into_schema 'database-modules/grid/', 'grid'}
 {import_common_into_schema 'database-modules/build_grid/', 'grid'}
 
--- -- Receptors-to lookup tables
+-- Receptors-to lookup tables
 {import_common_into_schema 'database-modules/grid_receptors_to/single-zoom-level.sql', 'grid'}
 {import_common_into_schema 'database-modules/build_grid_receptors_to/', 'grid'}
 
-
+-- Update the default RESULT_ZOOM_LEVELS value if desired
+-- Now set to 3 so the demo builds a bit faster than building the zoom-level 1 grid (the default value)
 UPDATE system.constants SET value = 3 WHERE key = 'RESULT_ZOOM_LEVELS';
