@@ -30,3 +30,6 @@ CREATE SCHEMA grid;
 -- -- Receptors-to lookup tables
 {import_common_into_schema 'database-modules/grid_receptors_to/single-zoom-level.sql', 'grid'}
 {import_common_into_schema 'database-modules/build_grid_receptors_to/', 'grid'}
+
+
+UPDATE system.constants SET value = 3 WHERE key = 'RESULT_ZOOM_LEVELS';
