@@ -1,6 +1,6 @@
 # Nature and grid build database
 
-This database is a demo how to use the common modules and generate the Nature and Grid related dbdata files. 
+This database is a demo how to use the common modules and load the Nature and Grid related dbdata files. 
 
 
 ## Commands

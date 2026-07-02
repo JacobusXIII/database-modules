@@ -2,7 +2,7 @@
 # Product specific database build settings.
 #
 
-$product = :"build-nature-and-grid" # The product these settings are for.
+$product = :"example" # The product these settings are for.
 
 #-------------------------------------
 
