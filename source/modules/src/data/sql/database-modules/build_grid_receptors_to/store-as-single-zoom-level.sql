@@ -40,8 +40,3 @@ SELECT system.store_query(
 	$$,
 	'{data_folder}/export/{tablename}_{datesuffix}.txt'
 );
-
-
--- Store these files for Calculator as well, because it's not using MATERIALIZED VIEWS yet.
-SELECT system.store_table('nature.habitats', '{data_folder}/export/{tablename}_{datesuffix}.txt');
-SELECT system.store_table('nature.relevant_habitats', '{data_folder}/export/{tablename}_{datesuffix}.txt');
