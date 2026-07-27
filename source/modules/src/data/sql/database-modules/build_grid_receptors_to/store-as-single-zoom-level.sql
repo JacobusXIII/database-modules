@@ -1,3 +1,20 @@
+--
+-- Make sure there is only one result-zoom-level set.
+--
+DO
+$BODY$
+DECLARE
+    zoom_levels int[];
+BEGIN
+    zoom_levels := string_to_array(system.constant('RESULT_ZOOM_LEVELS'), ',')::int[];
+
+    IF array_length(zoom_levels, 1) <> 1 THEN
+        RAISE EXCEPTION 'RESULT_ZOOM_LEVELS must contain exactly one value';
+    END IF;
+END
+$BODY$;
+
+
 -- 
 -- Store Multi-zoom-level- as Single-zoom-level structure by exporting the data without the zoom-level field.
 --
